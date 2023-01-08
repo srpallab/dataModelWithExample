@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.srpallab.viewmodelexample.databinding.ActivityMainBinding
 
@@ -22,13 +23,15 @@ class MainActivity : AppCompatActivity() {
             this, viewModelFactory
         )[MainActivityViewModel::class.java]
 
-        binding.tvResult.text = viewModel.getNumber().toString()
+        viewModel.totalData.observe(this, Observer {
+            binding.tvResult.text = it.toString()
+        })
+
 
         binding.btnAdd.setOnClickListener {
             if(binding.etNumber.text.isNotEmpty()){
                 val numberToAdd: String = binding.etNumber.text.toString()
                 viewModel.addNumber(numberToAdd.toInt())
-                binding.tvResult.text = viewModel.getNumber().toString()
             } else{
                 Toast.makeText(
                     this, "Please Give a Number", Toast.LENGTH_LONG
